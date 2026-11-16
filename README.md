@@ -1,31 +1,32 @@
 # The Star-Whale
 
-A tiny robot stands alone on a cliff above a sea of clouds, watching a
-whale made of stars and golden light breach toward a huge golden moon.
+A little robot stands alone on a cliff above a sea of clouds, holding a
+thin golden thread. At the other end of the thread, high in the night
+sky, swims a whale made of stars — a constellation that has come alive
+and is flying like the robot's kite beneath a huge golden moon.
 
-The picture is about scale and wonder: the smallest possible watcher and
-the largest possible sight, a creature that should be swimming in an ocean
-but is instead swimming through the night sky. The whale's body is drawn
-from constellations, its tail trailing sparks back into the clouds it rose
-from. Deep indigo against gold keeps the whole scene readable at a glance,
-even small.
+The picture is about a small thing reaching an enormous one: the robot
+cannot touch the whale, but it is holding on, and the whale is staying
+close. Deep indigo night holds everything together; gold carries the
+whale, the moon, the thread, and the light on the clouds below.
 
-## How it runs
+## What is in this entry
 
-`main.ts` (Node 22, standard library only) reads `entry.png` from the
-repository and writes it unchanged to `$MAKEFUN_OUTPUT_DIR/entry.png`,
-falling back to `/output/entry.png` when that variable is not set. It
-checks the artwork exists first, creates the output folder if needed, and
-verifies the written file is exactly the same size as the source.
+- `entry.png` — the artwork, a 1024 × 682 PNG.
+- `main.ts` — a small Node program that delivers the artwork. It reads
+  `entry.png` from beside itself and writes those exact bytes to
+  `entry.png` inside the output folder. The folder comes from the
+  `MAKEFUN_OUTPUT_DIR` environment variable and defaults to `/output`
+  when that variable is not set. Before reading, it checks the picture
+  is actually there; after writing, it checks the delivered copy is
+  exactly the same size as the original, and it stops with an error if
+  either check fails.
+
+## Running it
 
 ```sh
-mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+MAKEFUN_OUTPUT_DIR=/tmp/out node main.ts
 ```
 
-## Files
-
-- `entry.png` — the artwork (1024 × 683 PNG)
-- `main.ts` — the entry program
-- `README.md` — this file
-- `LICENSE` — MIT
-- `.makefun/owner.json` — payout wallet claim
+The finished image lands at `/tmp/out/entry.png`, byte for byte the
+same as `entry.png` in this repository.
