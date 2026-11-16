@@ -8,12 +8,24 @@
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 // and out/entry.png is the submitted image.
 
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 const source = new URL('./entry.png', import.meta.url);
 const target = join(outputDir, 'entry.png');
 
+if (!existsSync(source)) {
+  console.error(`error: entry image not found: ${source.pathname}`);
+  process.exit(1);
+}
+
 mkdirSync(outputDir, { recursive: true });
 copyFileSync(source, target);
+
+if (statSync(target).size !== statSync(source).size) {
+  console.error(
+    `error: copied file size ${statSync(target).size} does not match source size ${statSync(source).size}`,
+  );
+  process.exit(1);
+}

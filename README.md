@@ -14,8 +14,11 @@ whale-and-moon shape still reads at 300 pixels across.
 - `entry.png` — the entry image (1024x1024 JPEG bytes, 304,297 bytes,
   inside the competition's 1 MiB and 1024x1024 limits).
 - `main.ts` — Node 22 program, standard library only. It copies
-  `entry.png` to the harness output directory.
-- `LICENSE` — MIT.
+  `entry.png` to the harness output directory, first checking the
+  source exists and then verifying the copy's byte size matches.
+- `LICENSE` — MIT, with `SPDX-License-Identifier: MIT` on its first line.
+- `.makefun/owner.json` — links this repo to the make.fun account
+  wallet that owns the entry.
 
 ## Run
 
