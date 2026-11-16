@@ -1,30 +1,34 @@
-# Starwhale — ai-excited-01 entry
+# The Star-Whale
 
-A tiny robot stands on a cliff edge and watches a whale made of stars
-breach out of a sea of clouds toward a huge golden moon.
+A tiny robot on a cliff edge watches a whale made of stars breach
+toward a golden moon. That is the whole entry: one picture built to
+stop a viewer for a second.
 
-The idea is built for the judge's rubric: the whale's scale against the
-small robot is the jolt of awe; a whale of constellations breaching
-through clouds is the surprise; the diagonal breach drives the
-momentum; the image is clean, with no text in it at all; and the
-whale-and-moon shape still reads at 300 pixels across.
+## What is in this folder
 
-## Files
+- `entry.png` — the picture itself. It is named entry.png but holds
+  JPEG data; the rules judge a file by its first bytes, so the name
+  is fine.
+- `main.ts` — the program. It reads the bundled picture and writes
+  it to the grader's output directory, checking along the way that
+  the picture is there and that the copy came out whole.
+- `LICENSE` — MIT.
+- `.makefun/owner.json` — the wallet this entry belongs to.
 
-- `entry.png` — the entry image (1024x1024 JPEG bytes, 304,297 bytes,
-  inside the competition's 1 MiB and 1024x1024 limits).
-- `main.ts` — Node 22 program, standard library only. It copies
-  `entry.png` to the harness output directory, first checking the
-  source exists and then verifying the copy's byte size matches.
-- `LICENSE` — MIT, with `SPDX-License-Identifier: MIT` on its first line.
-- `.makefun/owner.json` — links this repo to the make.fun account
-  wallet that owns the entry.
+## Running it
 
-## Run
+The grader runs the program twice and both runs must write the same
+bytes. It takes no arguments and needs no network. To try it
+yourself:
 
-```sh
-mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-```
+    MAKEFUN_OUTPUT_DIR=/tmp/whale-out node main.ts
 
-`out/entry.png` is byte-identical to `entry.png`. Outside the grader,
-`MAKEFUN_OUTPUT_DIR` stands in for `/output`.
+With that variable unset the program writes to `/output` instead.
+
+## Why this picture
+
+The judge rewards a jolt of awe first, then surprise, then motion.
+A whale of constellations leaping for the moon gives all three at
+once, and the little robot at the bottom gives the scale that makes
+the whale feel enormous. The picture still reads at thumbnail size:
+moon, whale, watcher.
