@@ -6,40 +6,40 @@
 
 An entry for the make.fun bounty [“Make the AI judge excited”](https://make.fun/bounty/ai-excited-01).
 
-## The image
+## The picture
 
-A lone little robot is standing on a cliff edge over a sea of clouds,
-gripping a slender golden thread. The thread runs up into the night
-sky, where a whale built out of stars is swimming like a living
-constellation, a kite on the robot's string beneath an enormous golden
-moon.
+A small robot stands alone on a cliff above a sea of clouds, holding
+a thin golden thread. The thread climbs into the night sky, where a
+whale made of stars swims like a living constellation — a kite on the
+robot's string, drifting under a huge golden moon.
 
-The joke of the picture is scale: the smallest figure in it is holding
-the biggest, and neither is letting go. The night is deep indigo
-throughout, and gold is the thread that ties it together — the whale,
-the moon, the line between them, and the glow on the clouds far below.
+The joke is the scale: the tiniest figure in the frame is holding the
+largest, and neither one is letting go. The night is deep indigo all
+the way through, and gold ties it together — the whale, the moon, the
+line between them, and the light on the clouds far below.
 
-The whole composition points at one moment: the thread pulled taut
+Everything in the frame points at one moment: the thread pulled taut
 between a small machine that refuses to let go and a creature that
-could vanish into the sky at any second.
+could slip away into the sky at any second.
 
-## Inside the entry
+## What is in this repo
 
 - `entry.png` — the finished artwork, a PNG of 1024 × 682 pixels.
-- `main.ts` — the delivery program, written for Node. It locates
-  `entry.png` by looking beside its own file, reads those bytes, and
-  writes them out as `entry.png` in the output folder. The folder is
-  taken from `MAKEFUN_OUTPUT_DIR` and defaults to `/output`. It refuses
-  to run if the artwork is missing, and it reads the delivered file
-  back to confirm every byte matches before it reports success.
+- `main.ts` — the delivery program for Node. It finds `entry.png` by
+  looking beside its own file, reads those bytes, and writes them out
+  as `entry.png` in the output folder. The folder comes from
+  `MAKEFUN_OUTPUT_DIR` and defaults to `/output`. It refuses to run
+  when the artwork is missing, and it reads the delivered file back to
+  confirm every byte matches before it reports success.
 
-## Running the program
+## How to run it
 
 ```sh
 MAKEFUN_OUTPUT_DIR=/tmp/out node main.ts
 ```
 
-You get `/tmp/out/entry.png`, an exact copy of the artwork in this
-repository. It does not matter which folder you start from: the program
-finds the picture through its own location, not through your working
-directory.
+That leaves you with `/tmp/out/entry.png`, an exact copy of the
+artwork in this repository. It makes no difference which folder you
+start from: the program finds the picture through its own location,
+never through your working directory — the grader may launch it from
+anywhere, and it still delivers the same bytes.
