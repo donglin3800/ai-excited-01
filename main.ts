@@ -1,33 +1,42 @@
-// The Star-Whale — the little program that hands the judges the picture.
-// It reads the artwork sitting next to it and places an exact copy where
-// the contest looks for the finished image.
+// Delivering the Star-Whale.
+//
+// This script has one job: put the finished picture where the contest
+// expects it. The grader may launch it from any folder at all, so the
+// picture is looked up beside this script file itself, never beside
+// the shell the command was run from.
 
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-// The folder the contest reads from, or /output when nothing is set.
-const targetDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+// Turn this file's own location into a folder on disk.
+const myDir = dirname(fileURLToPath(import.meta.url));
+const picturePath = join(myDir, "entry.png");
 
-// Stop early with a plain message if the artwork is not beside this file.
-if (existsSync("entry.png") === false) {
-  console.error("No entry.png beside main.ts, nothing to deliver.");
+// Where the finished picture belongs, or /output if nothing says otherwise.
+const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
+const outPath = join(outDir, "entry.png");
+
+if (!existsSync(picturePath)) {
+  console.error(`Artwork not found: ${picturePath}`);
   process.exit(1);
 }
 
-// Make the folder if it is not there yet.
-mkdirSync(targetDir, { recursive: true });
+// Load the picture exactly as it is, byte for byte.
+const bytes = readFileSync(picturePath);
 
-// Pull the artwork off disk, byte for byte.
-const artwork = readFileSync("entry.png");
+mkdirSync(outDir, { recursive: true });
+writeFileSync(outPath, bytes);
 
-// Put those same bytes down in the target folder.
-writeFileSync(targetDir + "/entry.png", artwork);
-
-// Check the delivered copy is exactly as big as the original, so a
-// cut-short write cannot slip through unnoticed.
-const deliveredBytes = statSync(targetDir + "/entry.png").size;
-if (deliveredBytes !== artwork.length) {
-  console.error("Delivered " + deliveredBytes + " bytes but the artwork has " + artwork.length + ".");
+// Read the copy back and compare every byte with the original, so a
+// write that came out the right length but wrong in the middle is
+// caught instead of passing silently.
+const written = readFileSync(outPath);
+if (!written.equals(bytes)) {
+  console.error(
+    `Delivered copy does not match the artwork (${written.length} bytes read back, ${bytes.length} expected).`,
+  );
   process.exit(1);
 }
 
-console.log("Delivered entry.png to " + targetDir + "/entry.png (" + deliveredBytes + " bytes)");
+console.log(`Delivered ${outPath} (${bytes.length} bytes)`);
