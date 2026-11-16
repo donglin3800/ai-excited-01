@@ -1,25 +1,37 @@
-// The Star-Whale, fourth build: the picture sits next to this file as
-// entry.png, and this program hands it to the grader's output folder.
-// It reads one bundled file and writes one file, nothing else.
+// The Star-Whale — entry runner.
+// Loads the finished artwork from beside this file and drops it
+// where the grader expects the entry image to land.
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+// Where the picture lives in the repository, next to this script.
+const artworkName = "entry.png";
 
-function main(): void {
-  const bundled = new URL('./entry.png', import.meta.url);
-  if (existsSync(bundled) === false) {
-    throw new Error('bundled entry.png is not next to main.ts');
-  }
-  const bytes = readFileSync(bundled);
-  const targetDir = process.env.MAKEFUN_OUTPUT_DIR || '/output';
-  if (existsSync(targetDir) === false) {
-    mkdirSync(targetDir, { recursive: true });
-  }
-  const destination = targetDir + '/entry.png';
-  writeFileSync(destination, bytes);
-  const written = statSync(destination).size;
-  if (written !== bytes.length) {
-    throw new Error(`wrote ${written} bytes but the picture holds ${bytes.length}`);
-  }
+// The grader hands us a folder through the environment; without one
+// we fall back to the plain /output directory it normally provides.
+const outputFolder = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+const outputName = outputFolder + "/" + artworkName;
+
+// Refuse to run if the artwork is somehow not in the repository.
+if (!existsSync(artworkName)) {
+  throw new Error("cannot find the artwork file: " + artworkName);
 }
 
-main();
+// Make sure the destination folder is there before writing into it.
+mkdirSync(outputFolder, { recursive: true });
+
+// Read the whole picture in one go and write it out unchanged.
+const picture = readFileSync(artworkName);
+const sourceSize = statSync(artworkName).size;
+writeFileSync(outputName, picture);
+
+// Announce the finished write so the run log shows what happened.
+const written = statSync(outputName);
+
+// The copy must be whole: a short write would hand the judge a
+// broken picture, so fail loudly instead of passing one along.
+if (written.size !== sourceSize) {
+  throw new Error(
+    "short write: expected " + sourceSize + " bytes but wrote " + written.size,
+  );
+}
+console.log("wrote " + written.size + " bytes to " + outputName);
